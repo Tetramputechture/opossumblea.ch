@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => { 
+document.addEventListener("DOMContentLoaded", async () => {
   // the link to our opposums
   const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   //   "src": "opossums/curled-opossum-1.jpeg",
   //   "alt": "asleep and dreaming opossum curls up in their comfy corner of hay"
   // }
-  const response = await fetch(OPOSUMS_URL)
+  const response = await fetch(OPOSUMS_URL);
   const opossums = await response.json();
 
   // pick a random opossum from a list of opossums
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     OPOSSUM_EL.alt = opossum.alt;
     OPOSSUM_EL.title = opossum.alt;
   }
-  
+
   // toggle tunes on or off
   function toggleTunes() {
     if (TUNES_EL.paused) {
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   TUNES_BUTTON.addEventListener("click", toggleTunes);
 
   // configure next opossum button to conjure a new opossum
-  NEXT_POSSUM_EL.addEventListener("click", () => conjureOpossum);
+  NEXT_POSSUM_EL.addEventListener("click", conjureOpossum);
 
   // conjure first opossum
   conjureOpossum();
