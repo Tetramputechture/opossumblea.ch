@@ -1,48 +1,60 @@
-// the list of all opossums
-// as a JSON array with the example structure:
-// {
-//   "src": "opossums/curled-opossum-1.jpeg",
-//   "alt": "asleep and dreaming possum curls up in their comfy corner of hay"
-// }
-let opposums = [];
+document.addEventListener("DOMContentLoaded", async () => { 
+  // the link to our opposums
+  const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
 
-// the number of retries we have made to
-// gather the list of opossums
-let retries = 0;
+  // the <img> element displaying the opossum
+  const OPOSSUM_EL = document.getElementById("opossum");
 
-// the max amount of retries we have to gather
-// the list of opossums
-const MAX_RETRIES = 3;
+  // the <audio> element for opossum.mp3
+  const TUNES_EL = document.getElementById("tunes");
 
-// the <img> element displaying the opossum
-const OPPOSUM_EL = document.getElementById('opossum');
+  // the <input type="button"> element for playing tunes
+  const TUNES_BUTTON = document.getElementById("tunes-button");
 
-// set up xmlhttprequest to fetch and display opossum
-const xmlhttp = new XMLHttpRequest();
-xmlhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    opossums = JSON.parse(this.responseText);
-    conjureOpossum(opossums);
-  } else {
-    if (retries < MAX_RETRIES) {
-      retries++;
+  // the <a> tag the user can click to conjure a new opossum
+  const NEXT_POSSUM_EL = document.getElementById("next-opossum");
+
+  // fetch the list of all opossums
+  // as a JSON array with the example structure:
+  // {
+  //   "src": "opossums/curled-opossum-1.jpeg",
+  //   "alt": "asleep and dreaming opossum curls up in their comfy corner of hay"
+  // }
+  const response = await fetch(OPOSUMS_URL)
+  const opossums = await response.json();
+
+  // pick a random opossum from a list of opossums
+  // and display it on the page
+  function conjureOpossum() {
+    const opossum = opossums[Math.floor(Math.random() * opossums.length)];
+    OPOSSUM_EL.src = opossum.src;
+    OPOSSUM_EL.alt = opossum.alt;
+    OPOSSUM_EL.title = opossum.alt;
+  }
+  
+  // toggle tunes on or off
+  function toggleTunes() {
+    if (TUNES_EL.paused) {
+      TUNES_BUTTON.value = "nice. mute tunes?";
+      TUNES_BUTTON.textContent = "nice. mute tunes?";
+      TUNES_EL.load();
+      TUNES_EL.play();
     } else {
-      // always prefer presence of opossum rather than no opossum at all
-      location.replace("error.html");
+      TUNES_BUTTON.value = "opossum tunes?";
+      TUNES_BUTTON.textContent = "opossum tunes?";
+      TUNES_EL.pause();
     }
   }
-};
-xmlhttp.open("GET", "https://s3.amazonaws.com/opossumblea.ch/opossums.json", true);
 
-// prefer slower initial page loader and 
-// faster subsequent opossums, so gather 
-// all opossums on initial page load
-xmlhttp.send();
+  // set tunes to mute by default
+  TUNES_EL.defaultMuted = true;
 
-function conjureOpossum()  {
-  let opossum = opossums[Math.floor(Math.random() * opossums.length)];
-  OPPOSUM_EL.src = opossum.src;
-  OPPOSUM_EL.alt = opossum.alt;
-  OPPOSUM_EL.title = opossum.alt;
-}
+  // configure tunes button to toggle tunes on or off
+  TUNES_BUTTON.addEventListener("click", toggleTunes);
 
+  // configure next opossum button to conjure a new opossum
+  NEXT_POSSUM_EL.addEventListener("click", () => conjureOpossum());
+
+  // conjure first opossum
+  conjureOpossum();
+});
