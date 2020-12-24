@@ -20,8 +20,8 @@ build: clean transpile minify
 # ignore files we don't need stored in S3
 deploy: build
 	aws s3 sync . s3://opossumblea.ch \
-		--exclude "README.md"
-		--exclude "index.js"
-		--exclude "package.json"
-		--exclude "package-lock.json"
-		--exclude "node_modules/*"
+		--exclude "README.md" \
+		--exclude "index.js" \
+		--exclude "package.json" \
+		--exclude "package-lock.json" \
+		--exclude "node_modules/*" \
