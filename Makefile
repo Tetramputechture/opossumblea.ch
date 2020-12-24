@@ -1,20 +1,16 @@
 .PHONY: clean transpile minify build deploy
 
-# remove transpiled and minified files
+# remove minified js
 clean:
-	rm -f index-transpiled.js index-min.js
+	rm -f index-min.js
 
-# transpile index.js to index-transpiled.js
-transpile:
-	./node_modules/.bin/babel index.js -o index-transpiled.js
-
-# minify index-transpiled.js to index-min.js
+# minify index.js to index-min.js
 # which is what is referenced in index.html
 minify:
-	./node_modules/.bin/yuicompressor index-transpiled.js -o index-min.js
+	./node_modules/.bin/minify index.js -o index-min.js
 
-# transpile and minify JS
-build: clean transpile minify
+# remove old minified JS and minify latest JS
+build: clean minify
 
 # sync to S3
 # ignore files we don't need stored in S3
