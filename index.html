@@ -65,7 +65,10 @@
     <a href="javascript:void(0);" id="next-opossum">
       <image alt='loading opossum...' title='loading opossum...' id="opossum" />
     </a>
-    <audio id="tunes" loop src="https://opossumblea.ch/opossum.mp3" ></audio>
-    <input type="button" id="tunes-button" value="opossum tunes?" />
+    <iframe src="silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
+    <audio id="tunes" autoplay loop>
+      <source src="https://opossumblea.ch/opossum.mp3" type="audio/mp3">
+    </audio>
+    <input type="button" id="tunes-button" value="mute tunes?" />
   </body>
 </html>

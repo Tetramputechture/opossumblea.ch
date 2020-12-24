@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // toggle tunes on or off
   function toggleTunes() {
     if (TUNES_EL.paused) {
-      TUNES_BUTTON.value = "nice. mute tunes?";
-      TUNES_BUTTON.textContent = "nice. mute tunes?";
+      TUNES_BUTTON.value = "mute tunes?";
+      TUNES_BUTTON.textContent = "mute tunes?";
       TUNES_EL.load();
       TUNES_EL.play();
     } else {
@@ -45,9 +45,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       TUNES_EL.pause();
     }
   }
-
-  // set tunes to mute by default
-  TUNES_EL.defaultMuted = true;
 
   // configure tunes button to toggle tunes on or off
   TUNES_BUTTON.addEventListener("click", toggleTunes);
