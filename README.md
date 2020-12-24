@@ -10,8 +10,11 @@ an addition to `opossums.json`
 example:
 
 PR Title: Add curled-opossum-1.jpg
+
 curled-opossum-1.jpg (new file):
-![asleep and dreaming possum curls up in their comfy corner of hay][opossums/curled-opossum-1.jpg?raw=true "asleep and dreaming possum curls up in their comfy corner of hay"]
+
+![asleep and dreaming possum curls up in their comfy corner of hay](opossums/curled-opossum-1.jpg?raw=true "asleep and dreaming possum curls up in their comfy corner of hay")
+
 `opossums.json` addition:
 ```json
   ...
