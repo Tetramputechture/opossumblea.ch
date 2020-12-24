@@ -53,8 +53,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   TUNES_BUTTON.addEventListener("click", toggleTunes);
 
   // configure next opossum button to conjure a new opossum
-  NEXT_POSSUM_EL.addEventListener("click", () => conjureOpossum());
+  NEXT_POSSUM_EL.addEventListener("click", () => conjureOpossum);
 
   // conjure first opossum
   conjureOpossum();
+
+  // setinterval for new possums
+  setInterval(conjureOpossum, 5000);
 });
