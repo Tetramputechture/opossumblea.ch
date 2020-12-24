@@ -26,6 +26,6 @@ deploy: build
 		--exclude "package.json" \
 		--exclude "package-lock.json" \
 		--exclude "node_modules/*" \
-		--exclude ".git/*"
-		--exclude ".gitignore"
-		--exclude "Makefile"
+		--exclude ".git/*" \
+		--exclude ".gitignore" \
+		--exclude "Makefile" 
