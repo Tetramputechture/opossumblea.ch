@@ -18,7 +18,6 @@ deploy: build
 	aws s3 sync . s3://opossumblea.ch \
 		--exclude "README.md" \
 		--exclude "index.js" \
-		--exclude "index-transpiled.js" \
 		--exclude "package.json" \
 		--exclude "package-lock.json" \
 		--exclude "node_modules/*" \
