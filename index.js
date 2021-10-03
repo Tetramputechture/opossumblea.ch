@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // choose an opossum index that is not included in the
     // last five opossum indexes
     let opossumIndex = Math.floor(Math.random() * opossums.length);
-    while (previousOpossumIndexes.includes(opossumIndex)) {
+    while (previousOpossumIndexes.indexOf(opossumIndex) !== -1) {
       opossumIndex = Math.floor(Math.random() * opossums.length);
     }
     previousOpossumIndexes.push(opossumIndex);
@@ -74,12 +74,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   // configure tunes button to toggle tunes on or off
   TUNES_BUTTON.addEventListener("click", toggleTunes);
 
+  // setinterval for new possums
+  let timer = setInterval(conjureOpossum, 4500);
+
   // configure next opossum button to conjure a new opossum
-  NEXT_POSSUM_EL.addEventListener("click", () => conjureOpossum());
+  NEXT_POSSUM_EL.addEventListener("click", () => {
+    clearInterval(timer);
+    timer = setInterval(conjureOpossum, 4500)
+    conjureOpossum();
+  });
 
   // conjure first opossum
   conjureOpossum();
-
-  // setinterval for new possums
-  setInterval(conjureOpossum, 5000);
 });
