@@ -23,10 +23,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   const response = await fetch(OPOSUMS_URL);
   const opossums = await response.json();
 
+  // keep track of the last  opossum indexes, make sure we don't
+  // display any of them (ensures fresh opossums)
+  const PREVIOUS_OPOSSUM_MAX = 5;
+  const previousOpossumIndexes = [];
+
   // pick a random opossum from a list of opossums
   // and display it on the page
   function conjureOpossum() {
-    const opossum = opossums[Math.floor(Math.random() * opossums.length)];
+    // choose an opossum index that is not included in the
+    // last five opossum indexes
+    let opossumIndex = Math.floor(Math.random() * opossums.length);
+    while (previousOpossumIndexes.includes(opossumIndex)) {
+      opossumIndex = Math.floor(Math.random() * opossums.length);
+    }
+    previousOpossumIndexes.push(opossumIndex);
+    
+    // remove the first opossum index in the array,
+    // since it has now been PREVIOUS_OPOSSUM_MAX + 1
+    // opossums since it was last seen
+    if (previousOpossumIndexes.length >= PREVIOUS_OPOSSUM_MAX) {
+      previousOpossumIndexes.shift();
+    }
+
+    const opossum = opossums[opossumIndex];
     OPOSSUM_EL.src = opossum.src;
     OPOSSUM_EL.alt = opossum.alt;
     OPOSSUM_EL.title = opossum.alt;
