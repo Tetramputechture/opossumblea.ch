@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   // the link to our opposums
-  // const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
+  const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
 
   // the <img> element displaying the opossum
   const OPOSSUM_EL = document.getElementById("opossum");
