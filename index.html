@@ -42,7 +42,7 @@
     <script type="text/javascript" src="index-min.js"></script>
     <style>
       body {
-        background-color: #000000;
+        background-color: #333333;
       }
       img {
         position: absolute;
@@ -52,19 +52,32 @@
         max-width: 100%;
         max-height: 100%;
       }
-      input {
+      button#tunes-button {
         position: absolute;
         top: 98%;
         left: 97%;
         transform: translateX(-97%) translateY(-98%);
+        background: none;
+        color: inherit;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+      }
+      button#tunes-button > i {
+        font-size: 3em;
+        color: white;
+        text-shadow: 0px 0px 4px black;
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">  </head>
   <body>
     <a href="javascript:void(0);" id="next-opossum">
-      <image alt='loading opossum...' title='loading opossum...' id="opossum" />
+      <img alt='loading opossum...' title='loading opossum...' id="opossum" />
     </a>
-    <audio id="tunes" loop src="https://opossumblea.ch/opossum.mp3" ></audio>
-    <input type="button" id="tunes-button" value="opossum tunes?" />
+    <audio id="tunes" loop src="https://opossumblea.ch/opossum.mp3"></audio>
+    <button class="btn" id="tunes-button" title="tunes?">
+      <i class="las la-volume-mute" id="tunes-icon" aria-hidden="true"></i>
+    </button>
   </body>
 </html>

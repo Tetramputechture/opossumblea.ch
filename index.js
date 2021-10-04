@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   // the link to our opposums
-  const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
+  // const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
 
   // the <img> element displaying the opossum
   const OPOSSUM_EL = document.getElementById("opossum");
@@ -8,8 +8,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   // the <audio> element for opossum.mp3
   const TUNES_EL = document.getElementById("tunes");
 
-  // the <input type="button"> element for playing tunes
+  // the <button> element for playing tunes
   const TUNES_BUTTON = document.getElementById("tunes-button");
+
+  // the <i> element that displays the tunes button icon
+  const TUNES_ICON = document.getElementById("tunes-icon");
 
   // the <a> tag the user can click to conjure a new opossum
   const NEXT_POSSUM_EL = document.getElementById("next-opossum");
@@ -54,14 +57,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // toggle tunes on or off
   function toggleTunes() {
+    const PAUSE_ICON_CLASS = 'la-volume-mute';
+    const PLAY_ICON_CLASS = 'la-volume-up';
+
     if (TUNES_EL.paused) {
-      TUNES_BUTTON.value = "nice. mute tunes?";
-      TUNES_BUTTON.textContent = "nice. mute tunes?";
+      // play tunes
+      TUNES_ICON.classList.remove(PAUSE_ICON_CLASS);
+      TUNES_ICON.classList.add(PLAY_ICON_CLASS);
+      TUNES_BUTTON.title = 'nice. mute tunes?';
       TUNES_EL.load();
       TUNES_EL.play();
     } else {
-      TUNES_BUTTON.value = "opossum tunes?";
-      TUNES_BUTTON.textContent = "opossum tunes?";
+      // pause tunes
+      TUNES_ICON.classList.remove(PLAY_ICON_CLASS);
+      TUNES_ICON.classList.add(PAUSE_ICON_CLASS);
+      TUNES_BUTTON.title = 'tunes?';
       TUNES_EL.pause();
     }
   }
