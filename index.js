@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // the link to our opposums
-  const OPOSUMS_URL = "https://s3.amazonaws.com/opossumblea.ch/opossums.json";
+  const s3 = new AWS.S3({ region: 'us-east-1' })
 
   // the <img> element displaying the opossum
   const OPOSSUM_EL = document.getElementById("opossum");
@@ -17,43 +16,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   // the <a> tag the user can click to conjure a new opossum
   const NEXT_POSSUM_EL = document.getElementById("next-opossum");
 
-  // fetch the list of all opossums
-  // as a JSON array with the example structure:
-  // {
-  //   "src": "opossums/curled-opossum-1.jpeg",
-  //   "alt": "asleep and dreaming opossum curls up in their comfy corner of hay"
-  // }
-  const response = await fetch(OPOSUMS_URL);
-  const opossums = await response.json();
-
   // keep track of the last  opossum indexes, make sure we don't
   // display any of them (ensures fresh opossums)
   const PREVIOUS_OPOSSUM_MAX = 5;
   const previousOpossumIndexes = [];
 
-  // pick a random opossum from a list of opossums
-  // and display it on the page
-  function conjureOpossum() {
-    // choose an opossum index that is not included in the
-    // last five opossum indexes
-    let opossumIndex = Math.floor(Math.random() * opossums.length);
-    while (previousOpossumIndexes.indexOf(opossumIndex) !== -1) {
-      opossumIndex = Math.floor(Math.random() * opossums.length);
-    }
-    previousOpossumIndexes.push(opossumIndex);
-    
-    // remove the first opossum index in the array,
-    // since it has now been PREVIOUS_OPOSSUM_MAX + 1
-    // opossums since it was last seen
-    if (previousOpossumIndexes.length >= PREVIOUS_OPOSSUM_MAX) {
-      previousOpossumIndexes.shift();
-    }
+  let opossums = []
+  s3.listObjectsV2({ Bucket: 'opossumblea.ch', Prefix: 'opossums/' }, (err, data) => { 
+    if (err) {
+      console.log(err)
+    } else {
+      opossums = data.Contents;
 
-    const opossum = opossums[opossumIndex];
-    OPOSSUM_EL.src = opossum.src;
-    OPOSSUM_EL.alt = opossum.alt;
-    OPOSSUM_EL.title = opossum.alt;
-  }
+      conjureOpossum();
+      // setinterval for new possums
+      let timer = setInterval(conjureOpossum, 4500);
+
+      // configure next opossum button to conjure a new opossum
+      NEXT_POSSUM_EL.addEventListener("click", () => {
+        clearInterval(timer);
+        timer = setInterval(conjureOpossum, 4500)
+        conjureOpossum();
+      });
+    }
+  })
 
   // toggle tunes on or off
   function toggleTunes() {
@@ -84,16 +70,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   // configure tunes button to toggle tunes on or off
   TUNES_BUTTON.addEventListener("click", toggleTunes);
 
-  // setinterval for new possums
-  let timer = setInterval(conjureOpossum, 4500);
+  // pick a random opossum from a list of opossums
+  // and display it on the page
+  async function conjureOpossum() {
+    // choose an opossum index that is not included in the
+    // last five opossum indexes
+    let opossumIndex = Math.floor(Math.random() * opossums.length);
+    while (previousOpossumIndexes.indexOf(opossumIndex) !== -1) {
+      opossumIndex = Math.floor(Math.random() * opossums.length);
+    }
+    previousOpossumIndexes.push(opossumIndex);
+    
+    // remove the first opossum index in the array,
+    // since it has now been PREVIOUS_OPOSSUM_MAX + 1
+    // opossums since it was last seen
+    if (previousOpossumIndexes.length >= PREVIOUS_OPOSSUM_MAX) {
+      previousOpossumIndexes.shift();
+    }
 
-  // configure next opossum button to conjure a new opossum
-  NEXT_POSSUM_EL.addEventListener("click", () => {
-    clearInterval(timer);
-    timer = setInterval(conjureOpossum, 4500)
-    conjureOpossum();
-  });
-
-  // conjure first opossum
-  conjureOpossum();
+    const opossum = opossums[opossumIndex];
+    const headResponse = await s3.headObject({ Bucket: 'opossumblea.ch', Key: opossum.Key }).promise();
+    const metadata = headResponse.Metadata;
+    const title = metadata['x-amz-meta-opossum-alt'] || 'opossum';
+    OPOSSUM_EL.src = "https://s3.amazonaws.com/opossumblea.ch/" + opossum.Key;
+    OPOSSUM_EL.alt = title;
+    OPOSSUM_EL.title = title;
+  }
 });
